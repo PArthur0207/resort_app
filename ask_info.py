@@ -2,7 +2,7 @@ from datetime import datetime
 
 class DataEntry:
     DATE_FORMAT = "%d-%m-%Y"
-    TIME_FORMAT = "%H:%M"
+    TIME_FORMAT = "%H:%M"   
 
     def get_date(self, prompt, allow_default=False):
         user_input = input(prompt).strip()
@@ -22,11 +22,45 @@ class DataEntry:
             print("Invalid date format. Please enter the date as dd-mm-yyyy.")
             return self.get_date(prompt, allow_default)
         
-    def get_time(self, prompt):
+    def get_time(self, prompt="Enter time (HH:MM, 24-hour format between 08:00 and 16:00): "):
         user_input = input(prompt).strip()
+
+        # Quick check: must contain ":" and look like HH:MM
+        if ":" not in user_input or len(user_input) < 4:
+            print("Invalid input. Please use HH:MM format (24-hour).")
+            return self.get_time(prompt)
+
         try:
             parsed_time = datetime.strptime(user_input, self.TIME_FORMAT)
-            return parsed_time.strftime(self.TIME_FORMAT)
+            hour = parsed_time.hour
+            if 8 <= hour <= 16:
+                return parsed_time.strftime(self.TIME_FORMAT)
+            else:
+                print("Time must be between 08:00 and 16:00.")
+                return self.get_time(prompt)
         except ValueError:
-            print("Invalid time format. Please enter the time as HH:MM (24-hour).")
+            print("Invalid time format. Please enter the time as HH:MM (e.g. 14:30).")
             return self.get_time(prompt)
+
+    def get_pax(self, prompt):
+        try:
+            user_input = int(input(prompt))
+            return user_input
+        except:
+            print("Invalid Input please put a proper number.")
+            return self.get_pax(prompt)
+    
+    def get_cottage(self, prompt):
+        user_input = input(prompt).upper().strip()
+
+        if user_input == 'A':
+            return "Big Cottage"
+        elif user_input == 'B':
+            return "Small Cottage"
+        elif user_input == 'C':
+            return "Umbrella"
+        elif user_input == 'D':
+            return "None"
+        else:
+            print("Please enter a valid choice (A-D)")
+            return self.get_cottage(prompt)
