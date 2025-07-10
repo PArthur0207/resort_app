@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 class DataEntry:
     DATE_FORMAT = "%d-%m-%Y"
@@ -64,3 +65,26 @@ class DataEntry:
         else:
             print("Please enter a valid choice (A-D)")
             return self.get_cottage(prompt)
+        
+    def get_contact_info(self):
+        name = input("Enter your full name: ").strip()
+
+        # Accept only exactly 11 digits
+        while True:
+            contact = input("Enter your contact number (11 digits): ").strip()
+            if contact.isdigit() and len(contact) == 11:
+                break
+            print("Invalid contact number. Please enter exactly 11 digits.")
+
+        # Email is optional
+        while True:
+            email = input("Enter your email address (optional): ").strip()
+            if email == "" or re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                break
+            print("Invalid email format. Please try again.")
+
+        return {
+            "name": name,
+            "contact": contact,
+            "email": email if email else None
+        }
