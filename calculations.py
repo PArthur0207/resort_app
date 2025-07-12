@@ -1,13 +1,12 @@
 class Process:
-    def payment_calculator(self, pax, cottage):
-        entrance_fee = 100
-
-        cottage_prices = {
-            "Big Cottage": 500,
-            "Small Cottage": 300,
-            "Umbrella": 150,
-            "None": 0
+    def __init__(self):
+        self.cottage_prices = {
+            "A": 500,
+            "B": 300,
+            "C": 150,
+            "D": 0
         }
 
-        total = (pax * entrance_fee) + cottage_prices.get(cottage)
-        return total
+    def payment_calculator(self, pax, cottage):
+        cottage_price = self.cottage_prices.get(cottage.upper(), 0)  # default to 0
+        return pax * 50 + cottage_price  # per-person fee + cottage price

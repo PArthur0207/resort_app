@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resort Reservation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 2em auto;
+            padding: 1em;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        label, select, input {
+            display: block;
+            margin-bottom: 1em;
+            width: 100%;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            border: none;
+            padding: 0.8em;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            margin-bottom: 1em;
+        }
+    </style>
+</head>
+<body>
+    <h2>🏝️ Resort Reservation Form</h2>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        <label>Date (dd-mm-yyyy):
+            <input type="text" name="date" placeholder="e.g. 10-07-2025" value="{{ form_data.date }}">
+        </label>
+
+        <label>Time (24-hr format HH:MM):
+            <input type="text" name="time" placeholder="e.g. 14:00" value="{{ form_data.time }}">
+        </label>
+
+        <label>Number of People:
+            <input type="number" name="pax" value="{{ form_data.pax }}">
+        </label>
+
+        <label>Cottage Type:
+            <select name="cottage">
+                <option value="">-- Select Cottage --</option>
+                <option value="A" {% if form_data.cottage == "A" %}selected{% endif %}>A. Big Cottage (₱500)</option>
+                <option value="B" {% if form_data.cottage == "B" %}selected{% endif %}>B. Small Cottage (₱300)</option>
+                <option value="C" {% if form_data.cottage == "C" %}selected{% endif %}>C. Umbrella (₱150)</option>
+                <option value="D" {% if form_data.cottage == "D" %}selected{% endif %}>D. None</option>
+            </select>
+        </label>
+
+        <label>Your Name:
+            <input type="text" name="name" value="{{ form_data.name }}">
+        </label>
+
+        <label>Contact Number (11 digits):
+            <input type="text" name="contact" value="{{ form_data.contact }}">
+        </label>
+
+        <label>Email (optional):
+            <input type="email" name="email" value="{{ form_data.email }}">
+        </label>
+
+        <input type="submit" value="Submit Reservation">
+    </form>
+</body>
+</html>
