@@ -1,4 +1,5 @@
 from ask_info import DataEntry
+from calculations import Process
 from datetime import datetime
 import csv
 import os
@@ -26,10 +27,15 @@ cottage = ask.get_cottage("Please pick your cottage \n" \
 "Pick from A to C, or press enter if you will not avail a cottage:" )
 contact = ask.get_contact_info()
 
+# Calculate Payments
+do = Process()
+total_payment = do.payment_calculator(pax, cottage)
+print(f"💰 Total Payment: ₱{total_payment}")
+
 # Format date for consistency
 date = datetime.strptime(date, "%d-%m-%Y").strftime("%d-%m-%Y")
 
-# Prepare data to write
+# Prepare reservation data
 reservation_data = {
     "Date": date,
     "Time": time,
@@ -37,13 +43,17 @@ reservation_data = {
     "Cottage": cottage,
     "Name": contact["name"],
     "Contact": contact["contact"],
-    "Email": contact["email"] or ""
+    "Email": contact.get("email", ""),
+    "Total Payment": total_payment
 }
+
+# Ensure consistent field order
+fieldnames = ["Date", "Time", "Pax", "Cottage", "Name", "Contact", "Email", "Total Payment"]
 
 # Write to CSV
 file_exists = os.path.isfile(FILENAME)
 with open(FILENAME, mode="a", newline="") as file:
-    writer = csv.DictWriter(file, fieldnames=reservation_data.keys())
+    writer = csv.DictWriter(file, fieldnames=fieldnames)
     if not file_exists:
         writer.writeheader()
     writer.writerow(reservation_data)
@@ -59,7 +69,7 @@ rows.sort(key=lambda row: parse_date_time(row["Date"], row["Time"]))
 
 # Overwrite CSV with sorted data
 with open(FILENAME, mode="w", newline="") as file:
-    writer = csv.DictWriter(file, fieldnames=reservation_data.keys())
+    writer = csv.DictWriter(file, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(rows)
 
