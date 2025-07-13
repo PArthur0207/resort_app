@@ -9,27 +9,30 @@
             max-width: 600px;
             margin: 2em auto;
             padding: 1em;
-            background-color: #f9f9f9;
-            border-radius: 8px;
+            background-color: #f2f2f2;
+            border-radius: 10px;
         }
-        label, select, input {
+        label, input, select {
             display: block;
-            margin-bottom: 1em;
             width: 100%;
+            margin-bottom: 1em;
         }
         input[type="submit"] {
-            background-color: #28a745;
+            background-color: #007bff;
+            color: white;
             border: none;
             padding: 0.8em;
-            color: white;
+            border-radius: 5px;
             cursor: pointer;
-            border-radius: 4px;
-        }
-        input[type="submit"]:hover {
-            background-color: #218838;
         }
         .error {
             color: red;
+            font-weight: bold;
+            margin-bottom: 1em;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
             margin-bottom: 1em;
         }
     </style>
@@ -40,40 +43,43 @@
     {% if error %}
         <div class="error">{{ error }}</div>
     {% endif %}
+    {% if success %}
+        <div class="success">{{ success }}</div>
+    {% endif %}
 
     <form method="POST">
         <label>Date (dd-mm-yyyy):
-            <input type="text" name="date" placeholder="e.g. 10-07-2025" value="{{ form_data.date }}">
+            <input type="text" name="date" value="{{ form_data.date if form_data else '' }}" required>
         </label>
 
-        <label>Time (24-hr format HH:MM):
-            <input type="text" name="time" placeholder="e.g. 14:00" value="{{ form_data.time }}">
+        <label>Time (24hr HH:MM):
+            <input type="text" name="time" placeholder="e.g. 14:00" value="{{ form_data.time or '' }}">
         </label>
 
         <label>Number of People:
-            <input type="number" name="pax" value="{{ form_data.pax }}">
+            <input type="number" name="pax" value="{{ form_data.pax or '' }}">
         </label>
 
-        <label>Cottage Type:
+        <label>Cottage:
             <select name="cottage">
-                <option value="">-- Select Cottage --</option>
-                <option value="A" {% if form_data.cottage == "A" %}selected{% endif %}>A. Big Cottage (₱500)</option>
-                <option value="B" {% if form_data.cottage == "B" %}selected{% endif %}>B. Small Cottage (₱300)</option>
-                <option value="C" {% if form_data.cottage == "C" %}selected{% endif %}>C. Umbrella (₱150)</option>
-                <option value="D" {% if form_data.cottage == "D" %}selected{% endif %}>D. None</option>
+                <option value="">-- Select --</option>
+                <option value="A" {% if form_data.cottage == 'A' %}selected{% endif %}>A - Big Cottage</option>
+                <option value="B" {% if form_data.cottage == 'B' %}selected{% endif %}>B - Small Cottage</option>
+                <option value="C" {% if form_data.cottage == 'C' %}selected{% endif %}>C - Umbrella</option>
+                <option value="D" {% if form_data.cottage == 'D' %}selected{% endif %}>D - None</option>
             </select>
         </label>
 
         <label>Your Name:
-            <input type="text" name="name" value="{{ form_data.name }}">
+            <input type="text" name="name" value="{{ form_data.name or '' }}">
         </label>
 
         <label>Contact Number (11 digits):
-            <input type="text" name="contact" value="{{ form_data.contact }}">
+            <input type="text" name="contact" value="{{ form_data.contact or '' }}">
         </label>
 
         <label>Email (optional):
-            <input type="email" name="email" value="{{ form_data.email }}">
+            <input type="email" name="email" value="{{ form_data.email or '' }}">
         </label>
 
         <input type="submit" value="Submit Reservation">
